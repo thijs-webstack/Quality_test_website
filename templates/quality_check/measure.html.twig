@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Meten{% endblock %}
+
+{% block body %}
+    <main class="flex justify-center px-4 py-10">
+        <div class="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-8 md:p-10">
+
+            <h1 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-10">
+                Metingen invoeren
+            </h1>
+
+            <form method="post" class="space-y-12">
+
+                {% for product, parts in structure %}
+                    <section>
+
+                        <!-- PRODUCT TITLE -->
+                        <h2 class="text-xl font-semibold text-gray-900 mb-6">
+                            {{ product|replace({'_':' '})|capitalize }}
+                        </h2>
+
+                        <!-- PARTS -->
+                        <div class="space-y-4">
+                            {% for key, part in parts %}
+                                <div
+                                    class="
+                                    flex items-center justify-between
+                                    rounded-xl border border-gray-200
+                                    px-4 py-4
+                                "
+                                >
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900">
+                                            {{ part.label }}
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            Procedure: {{ part.norm }} g
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <input
+                                            type="number"
+                                            step="0.1"
+                                            required
+                                            name="measurements[{{ product }}][{{ key }}]"
+                                            class="
+                                            w-28
+                                            rounded-lg
+                                            border border-gray-300
+                                            px-3 py-2
+                                            text-right
+                                            text-gray-900
+                                            focus:border-yellow-500
+                                            focus:ring-2
+                                            focus:ring-yellow-400
+                                        "
+                                        >
+                                        <span class="text-sm text-gray-500">
+                                        g
+                                    </span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </section>
+                {% endfor %}
+
+                <!-- SUBMIT -->
+                <button
+                    type="submit"
+                    class="
+                    w-full rounded-xl
+                    bg-yellow-500
+                    px-6 py-4
+                    text-base font-semibold text-black
+                    shadow-md
+                    transition
+                    hover:bg-yellow-400
+                    hover:shadow-lg
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-yellow-400
+                    focus:ring-offset-2
+                    active:scale-[0.98]
+                "
+                >
+                    Afronden
+                </button>
+
+            </form>
+        </div>
+    </main>
+{% endblock %}

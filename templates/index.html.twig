@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quality Check{% endblock %}
+
+{% block body %}
+    <main class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <section class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8 md:p-10">
+
+            <h1 class="text-3xl font-semibold text-gray-900 mb-4">
+                Quality Check
+            </h1>
+
+            <p class="text-gray-600 leading-relaxed mb-8">
+                Interne tool voor crewtrainers om producten te wegen
+                en resultaten direct te delen in de groepsapp.
+            </p>
+
+            <a
+                href="{{ path('quality_check_start') }}"
+                class="
+                inline-flex items-center justify-center
+                w-full
+                rounded-xl
+                bg-yellow-500
+                px-6 py-4
+                text-base font-semibold text-black
+                shadow-md
+                transition
+                hover:bg-yellow-400
+                hover:shadow-lg
+                focus:outline-none
+                focus:ring-2
+                focus:ring-yellow-400
+                focus:ring-offset-2
+                active:scale-[0.98]
+            "
+            >
+                Start Quality Check
+            </a>
+
+            <div class="mt-10 text-center text-sm text-gray-400">
+                Alleen voor intern gebruik
+            </div>
+
+        </section>
+    </main>
+{% endblock %}

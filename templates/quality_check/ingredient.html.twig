@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kies ingrediënt{% endblock %}
+
+{% block body %}
+    <h1>Kies ingrediënt</h1>
+
+    <p>
+        Burger:
+        <strong>{{ product|replace({'_': ' '})|capitalize }}</strong>
+    </p>
+
+    <form method="post">
+        {% for key, label in ingredients %}
+            <div>
+                <label>
+                    <input type="radio" name="ingredient" value="{{ key }}" required>
+                    {{ label }}
+                </label>
+            </div>
+        {% endfor %}
+
+        <button type="submit">Volgende</button>
+    </form>
+{% endblock %}

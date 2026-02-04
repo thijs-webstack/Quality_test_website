@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Resultaat{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen bg-gray-50 flex items-start justify-center py-12 px-4">
+        <div class="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-8">
+
+            <h1 class="text-2xl font-semibold text-gray-900 mb-1">
+                Quality Check – Resultaat
+            </h1>
+            <p class="text-sm text-gray-500 mb-6">
+                Overzicht van de uitgevoerde metingen
+            </p>
+            {# ===== Begroeting bepalen ===== #}
+            {% set hour = "now"|date("H") + 0 %}
+            {% if hour < 12 %}
+                {% set greeting = 'Goedemorgen' %}
+            {% elseif hour < 18 %}
+                {% set greeting = 'Goedemiddag' %}
+            {% else %}
+                {% set greeting = 'Goedeavond' %}
+            {% endif %}
+
+            {# ===== Tekstregels opbouwen ===== #}
+            {% set lines = [] %}
+
+            {% set lines = lines|merge([
+                greeting ~ ' allemaal,',
+                '',
+                'Vandaag heb ik de volgende metingen gedaan:',
+                '',
+                'Shiftmanager: ' ~ shiftManager,
+                'Crewlid: ' ~ crew,
+                ''
+            ]) %}
+
+            {# ===== Resultaten groeperen per product ===== #}
+            {% set currentProduct = null %}
+
+            {% for r in results %}
+                {% if currentProduct != r.product %}
+                    {# lege regel tussen producten #}
+                    {% if currentProduct is not null %}
+                        {% set lines = lines|merge(['']) %}
+                    {% endif %}
+
+                    {% set currentProduct = r.product %}
+                    {% set lines = lines|merge([
+                        r.product|replace({'_':' '})|capitalize
+                    ]) %}
+                {% endif %}
+
+                {% set lines = lines|merge([
+                    '- ' ~ r.label ~ ': ' ~ r.measured ~ 'g (procedure ' ~ r.norm ~ 'g)'
+                ]) %}
+            {% endfor %}
+
+            <textarea
+                id="copy-output"
+                rows="14"
+                readonly
+                class="w-full resize-none rounded-xl border border-gray-300 bg-gray-50 p-4 font-mono text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            >{{ lines|join('\n') }}</textarea>
+
+            <div class="mt-6 flex items-center gap-4">
+                <button
+                    type="button"
+                    onclick="copyResult()"
+                    class="inline-flex items-center rounded-xl bg-yellow-400 px-6 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-yellow-500 active:scale-95 transition"
+                >
+                    Kopieer bericht
+                </button>
+
+                <span
+                    id="copy-status"
+                    class="hidden text-sm font-medium text-green-600"
+                >
+                ✔ Gekopieerd
+            </span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyResult() {
+            const textarea = document.getElementById('copy-output');
+            const status = document.getElementById('copy-status');
+
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+
+            status.classList.remove('hidden');
+        }
+    </script>
+{% endblock %}

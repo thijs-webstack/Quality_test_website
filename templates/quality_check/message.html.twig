@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crew Bericht{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col pb-40 px-4 pt-8">
+        <div class="max-w-3xl w-full mx-auto space-y-8">
+
+            {# --- Header --- #}
+            <header class="text-center animate-scale-in">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-50 text-yellow-600 rounded-2xl shadow-sm mb-4 transform -rotate-3">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-2">Crew Bericht</h1>
+                <p class="text-slate-500 font-medium">
+                    Coachend bericht voor je crew. Pas aan en kopieer.
+                </p>
+            </header>
+
+            {# --- Editable Message Card --- #}
+            <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden animate-fade-in-up">
+                <div class="bg-slate-50/50 px-8 py-4 border-b border-slate-100 backdrop-blur-sm flex items-center justify-between">
+                    <label for="message-text" class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Bewerkbaar bericht
+                    </label>
+                    <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-wider">Vrij aanpasbaar</span>
+                </div>
+                <div class="p-6">
+                    <textarea
+                        id="message-text"
+                        rows="16"
+                        class="w-full resize-none bg-slate-50 border-0 rounded-2xl p-5 text-slate-700 font-mono text-sm leading-relaxed ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-yellow-400 focus:bg-white transition-all shadow-inner placeholder:text-slate-300"
+                        spellcheck="false"
+                    >{{ message_text }}</textarea>
+                </div>
+            </div>
+
+            {# --- Sticky Footer --- #}
+            <div class="fixed bottom-0 left-0 right-0 p-4 z-40 safe-area-bottom pointer-events-none">
+                <div class="max-w-3xl mx-auto pointer-events-auto flex gap-3">
+
+                    {# Back to Result #}
+                    <a href="{{ path('quality_check_result') }}"
+                       class="bg-white text-slate-500 font-bold py-4 px-6 rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-100 hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-95 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Terug
+                    </a>
+
+                    {# Copy Message #}
+                    <button
+                        type="button"
+                        onclick="copyMessage()"
+                        id="copy-btn"
+                        class="flex-1 bg-yellow-400 text-slate-900 font-bold py-4 px-6 rounded-2xl shadow-lg shadow-yellow-400/20 active:scale-[0.98] transition-all duration-300 hover:bg-yellow-300 flex items-center justify-center gap-2 group"
+                    >
+                        <svg class="w-5 h-5 transition-transform group-hover:-rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>
+                        <span id="copy-text">Kopieer Bericht</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function copyMessage() {
+            const textarea = document.getElementById('message-text');
+            const btn = document.getElementById('copy-btn');
+            const btnText = document.getElementById('copy-text');
+
+            const successFeedback = () => {
+                const successClasses = 'bg-green-500 text-white hover:bg-green-600 shadow-green-500/30';
+                btn.className = btn.className.replace('bg-yellow-400 text-slate-900 hover:bg-yellow-300 shadow-yellow-400/20', successClasses);
+                const originalText = btnText.textContent;
+                btnText.textContent = "Gekopieerd ✓";
+
+                setTimeout(() => {
+                    btn.setAttribute('class', 'flex-1 bg-yellow-400 text-slate-900 font-bold py-4 px-6 rounded-2xl shadow-lg shadow-yellow-400/20 active:scale-[0.98] transition-all duration-300 hover:bg-yellow-300 flex items-center justify-center gap-2 group');
+                    btnText.textContent = originalText;
+                }, 1500);
+            };
+
+            try {
+                navigator.clipboard.writeText(textarea.value).then(successFeedback).catch(() => {
+                    textarea.select();
+                    document.execCommand('copy');
+                    successFeedback();
+                });
+            } catch (err) {
+                textarea.select();
+                document.execCommand('copy');
+                successFeedback();
+            }
+        }
+    </script>
+{% endblock %}

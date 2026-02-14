@@ -31,7 +31,7 @@ final class QualityCheckController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            
+
             // Initialize session with security migration
             $this->qcSession->start($data['shiftManager'], $data['crew']);
 
@@ -59,7 +59,7 @@ final class QualityCheckController extends AbstractController
             }
 
             $selectedIds = $request->request->all('products') ?? [];
-            
+
             if (empty($selectedIds)) {
                 $this->addFlash('error', 'Selecteer ten minste één product.');
             } else {
@@ -99,7 +99,7 @@ final class QualityCheckController extends AbstractController
             }
 
             $measurements = $request->request->all('measurements');
-            
+
             // Basic validation: ensure we have data
             if (empty($measurements)) {
                 $this->addFlash('error', 'Vul de metingen in.');
@@ -125,13 +125,32 @@ final class QualityCheckController extends AbstractController
         }
 
         $reportData = $this->qcSession->getReportData();
-        $clipboardText = $this->qcSession->buildClipboardText();
+        $clipboardText = $this->qcSession->buildCtMessage();
         $csrfToken = $this->csrfTokenManager->refreshToken('qc_reset');
 
         return $this->render('quality_check/result.html.twig', [
             'report' => $reportData,
             'clipboardText' => $clipboardText,
             'csrf_token' => $csrfToken->getValue(),
+        ]);
+    }
+
+    #[Route('/message/{type}', name: '_message', methods: ['GET'], requirements: ['type' => 'crew|ct'])]
+    public function message(string $type): Response
+    {
+        if (!$this->qcSession->hasShiftInfo() || !$this->qcSession->hasSelection() || !$this->qcSession->hasMeasurements()) {
+            return $this->redirectToRoute('quality_check_start');
+        }
+
+        $text = match ($type) {
+            'crew' => $this->qcSession->buildCrewMessage(),
+            'ct' => $this->qcSession->buildCtMessage(),
+            default => throw $this->createNotFoundException(),
+        };
+
+        return $this->render('quality_check/message.html.twig', [
+            'message_text' => $text,
+            'type' => $type,
         ]);
     }
 

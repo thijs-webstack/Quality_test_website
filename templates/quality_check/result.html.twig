@@ -3,95 +3,147 @@
 {% block title %}Resultaat{% endblock %}
 
 {% block body %}
-    <div class="min-h-screen bg-gray-50 flex items-start justify-center py-12 px-4">
-        <div class="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-8">
+    <div class="flex flex-col pb-40 px-4 pt-10">
+        <div class="max-w-3xl w-full mx-auto space-y-8">
 
-            <h1 class="text-2xl font-semibold text-gray-900 mb-1">
-                Quality Check – Resultaat
-            </h1>
-            <p class="text-sm text-gray-500 mb-6">
-                Overzicht van de uitgevoerde metingen
-            </p>
-            {# ===== Begroeting bepalen ===== #}
-            {% set hour = "now"|date("H") + 0 %}
-            {% if hour < 12 %}
-                {% set greeting = 'Goedemorgen' %}
-            {% elseif hour < 18 %}
-                {% set greeting = 'Goedemiddag' %}
-            {% else %}
-                {% set greeting = 'Goedeavond' %}
-            {% endif %}
+            {# Progress #}
+            {% include 'quality_check/_progress.html.twig' with {step: 4} %}
 
-            {# ===== Tekstregels opbouwen ===== #}
-            {% set lines = [] %}
-
-            {% set lines = lines|merge([
-                greeting ~ ' allemaal,',
-                '',
-                'Vandaag heb ik de volgende metingen gedaan:',
-                '',
-                'Shiftmanager: ' ~ shiftManager,
-                'Crewlid: ' ~ crew,
-                ''
-            ]) %}
-
-            {# ===== Resultaten groeperen per product ===== #}
-            {% set currentProduct = null %}
-
-            {% for r in results %}
-                {% if currentProduct != r.product %}
-                    {# lege regel tussen producten #}
-                    {% if currentProduct is not null %}
-                        {% set lines = lines|merge(['']) %}
-                    {% endif %}
-
-                    {% set currentProduct = r.product %}
-                    {% set lines = lines|merge([
-                        r.product|replace({'_':' '})|capitalize
-                    ]) %}
-                {% endif %}
-
-                {% set lines = lines|merge([
-                    '- ' ~ r.label ~ ': ' ~ r.measured ~ 'g (procedure ' ~ r.norm ~ 'g)'
-                ]) %}
-            {% endfor %}
-
-            <textarea
-                id="copy-output"
-                rows="14"
-                readonly
-                class="w-full resize-none rounded-xl border border-gray-300 bg-gray-50 p-4 font-mono text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            >{{ lines|join('\n') }}</textarea>
-
-            <div class="mt-6 flex items-center gap-4">
-                <button
-                    type="button"
-                    onclick="copyResult()"
-                    class="inline-flex items-center rounded-xl bg-yellow-400 px-6 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-yellow-500 active:scale-95 transition"
-                >
-                    Kopieer bericht
-                </button>
-
-                <span
-                    id="copy-status"
-                    class="hidden text-sm font-medium text-green-600"
-                >
-                ✔ Gekopieerd
-            </span>
+            {# --- Celebration Header --- #}
+            <div class="text-center animate-scale-in">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 text-green-600 rounded-3xl shadow-lg shadow-green-100/50 mb-6 transform rotate-6">
+                    <svg class="w-10 h-10 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-2">Meting Voltooid!</h1>
+                <p class="text-slate-500 font-medium">
+                    Het rapport is gegenereerd en klaar om te delen.
+                </p>
             </div>
+
+            {# --- Visual Report Card --- #}
+            <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden animate-fade-in-up">
+                <div class="bg-slate-50/50 px-8 py-5 border-b border-slate-100 backdrop-blur-sm">
+                    <h2 class="text-lg font-bold text-slate-800">Resultaten Overzicht</h2>
+                </div>
+
+                <div class="p-8 space-y-1">
+                    {% set currentProduct = null %}
+
+                    {% for row in report.results %}
+                        {% if currentProduct != row.product %}
+                            {% set currentProduct = row.product %}
+                            <div class="pt-6 pb-3 first:pt-0">
+                                <h3 class="inline-block bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded-lg text-sm">
+                                    {{ row.product_name }}
+                                </h3>
+                            </div>
+                        {% endif %}
+
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50 rounded-xl px-2 -mx-2 transition-colors">
+                            <span class="text-slate-600 font-medium">{{ row.label }}</span>
+                            <div class="flex items-center gap-4">
+                                <span class="text-xs font-semibold text-slate-300">
+                                    / {{ row.norm }}g
+                                </span>
+                                <span class="font-mono text-lg font-bold {{ row.diff|abs > 2 ? 'text-red-500' : 'text-green-600' }}">
+                                    {{ row.measured }}g
+                                </span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {# --- Copy Preview (Refined Light Mode) --- #}
+            <div class="bg-slate-50 rounded-[2rem] p-1 shadow-inner border border-slate-200 animate-fade-in-up" style="animation-delay: 100ms">
+                <div class="bg-white rounded-[1.8rem] p-6 border border-slate-100 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                         <label for="copy-output" class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                            McD Connect Bericht
+                        </label>
+                    </div>
+                    <textarea
+                        id="copy-output"
+                        rows="8"
+                        readonly
+                        class="w-full resize-none bg-transparent border-0 p-0 text-slate-600 font-mono text-sm focus:ring-0 leading-relaxed custom-scrollbar selection:bg-yellow-100"
+                    >{{ clipboardText }}</textarea>
+                </div>
+            </div>
+
+            {# --- Action Footer --- #}
+            <div class="fixed bottom-0 left-0 right-0 p-4 z-40 safe-area-bottom pointer-events-none">
+                <div class="max-w-3xl mx-auto pointer-events-auto flex flex-col sm:flex-row gap-3">
+
+                    {# Reset #}
+                    <form action="{{ path('quality_check_reset') }}" method="post"
+                          onsubmit="return confirm('Weet je zeker dat je een nieuwe meting wilt starten?');"
+                          class="sm:flex-none">
+                        <button type="submit" class="w-full sm:w-auto bg-white text-slate-500 font-bold py-4 px-6 rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-100 hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-95 h-full">
+                            Nieuw
+                        </button>
+                    </form>
+
+                    {# Copy Button #}
+                    <button
+                        type="button"
+                        onclick="copyResult()"
+                        id="copy-btn"
+                        class="flex-1 bg-yellow-400 text-slate-900 font-bold py-4 px-8 rounded-2xl shadow-lg shadow-yellow-400/20 active:scale-[0.98] transition-all duration-300 hover:bg-yellow-300 flex items-center justify-center gap-2 group"
+                    >
+                        <svg class="w-5 h-5 transition-transform group-hover:-rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>
+                        <span id="copy-text">Kopieer Bericht</span>
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
         function copyResult() {
             const textarea = document.getElementById('copy-output');
-            const status = document.getElementById('copy-status');
+            const btn = document.getElementById('copy-btn');
+            const btnText = document.getElementById('copy-text');
 
             textarea.select();
             textarea.setSelectionRange(0, 99999);
-            document.execCommand('copy');
 
-            status.classList.remove('hidden');
+            const successFeedback = () => {
+                // Success State style
+                const originalClasses = 'bg-yellow-400 text-slate-900 hover:bg-yellow-300 shadow-yellow-400/20';
+                const successClasses = 'bg-green-500 text-white hover:bg-green-600 shadow-green-500/30';
+
+                // Swap classes
+                btn.className = btn.className.replace('bg-yellow-400 text-slate-900 hover:bg-yellow-300 shadow-yellow-400/20', successClasses);
+
+                const originalText = btnText.textContent;
+                btnText.textContent = "Gekopieerd ✓";
+
+                // Revert
+                setTimeout(() => {
+                    // Force reset to base state to be safe
+                    btn.setAttribute('class', 'flex-1 bg-yellow-400 text-slate-900 font-bold py-4 px-8 rounded-2xl shadow-lg shadow-yellow-400/20 active:scale-[0.98] transition-all duration-300 hover:bg-yellow-300 flex items-center justify-center gap-2 group');
+                    btnText.textContent = originalText;
+                }, 1500);
+            };
+
+            try {
+                navigator.clipboard.writeText(textarea.value).then(successFeedback).catch(() => {
+                    document.execCommand('copy');
+                    successFeedback();
+                });
+            } catch (err) {
+                document.execCommand('copy');
+                successFeedback();
+            }
         }
     </script>
 {% endblock %}

@@ -4,7 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c9cddb5-8926-4d58-af80-3b1b77091bd2" name="Changes" comment="commit to deploy" />
+    <list default="true" id="8c9cddb5-8926-4d58-af80-3b1b77091bd2" name="Changes" comment="commit to deploy">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/debug.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/reference.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/reference.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/QualityCheckController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/QualityCheckController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/QualityCheckStartType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QualityCheckStartType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/NormCatalog.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/NormCatalog.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/quality_check/measure.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/quality_check/measure.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/quality_check/product.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/quality_check/result.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/quality_check/result.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/quality_check/start.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/quality_check/start.html.twig" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -179,6 +195,7 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Shell Script.start.executor&quot;: &quot;Run&quot;,
     &quot;Shell Script.stop.executor&quot;: &quot;Run&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
@@ -254,6 +271,10 @@
       <workItem from="1770192160502" duration="1702000" />
       <workItem from="1770193917480" duration="338000" />
       <workItem from="1770194318100" duration="17376000" />
+      <workItem from="1770276651126" duration="6482000" />
+      <workItem from="1770363964232" duration="184000" />
+      <workItem from="1770890458893" duration="227000" />
+      <workItem from="1770996454395" duration="5976000" />
     </task>
     <task id="LOCAL-00001" summary="commit to deploy">
       <option name="closed" value="true" />
@@ -263,7 +284,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770217067890</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="commit to deploy">
+      <option name="closed" value="true" />
+      <created>1770276721507</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1770276721507</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

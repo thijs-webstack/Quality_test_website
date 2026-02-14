@@ -1,64 +1,163 @@
 <?php
 
-// src/Service/NormCatalog.php
 namespace App\Service;
 
 final class NormCatalog
 {
-    public function getAll(): array
-    {
-        return [
-            // ===== BURGERS =====
-            'big_mac' => [
-                'sla' => ['label' => 'IJsbergsla', 'norm' => 30], // 2 × 15 g
-            ],
-
-            'quarter_pounder' => [
-                'ui' => ['label' => 'Ui', 'norm' => 7],
-            ],
-
-            'mcchicken' => [
-                'sla' => ['label' => 'IJsbergsla', 'norm' => 30],
-            ],
-
-            'chili_chicken' => [
-                'sla' => ['label' => 'IJsbergsla', 'norm' => 15],
-            ],
-
+    /** 
+     * Central definition of the catalog.
+     * Structure: Category -> ProductKey -> Details
+     */
+    private const CATALOG = [
+        'burger' => [
             'big_tasty' => [
-                'sla' => ['label' => 'IJsbergsla', 'norm' => 30],
-                'ui'  => ['label' => 'Ui', 'norm' => 7],
+                'name' => 'Big Tasty',
+                'norms' => [
+                    'sla' => ['label' => 'IJsbergsla', 'norm' => 30],
+                    'ui' => ['label' => 'Ui', 'norm' => 7],
+                ]
             ],
-
+            'big_mac' => [
+                'name' => 'Big Mac',
+                'norms' => [
+                    'sla' => ['label' => 'IJsbergsla', 'norm' => 30], // 2 × 15 g
+                ]
+            ],
             'crispy' => [
-                'batavia' => ['label' => 'Batavia sla', 'norm' => 8],
+                'name' => 'Crispy',
+                'norms' => [
+                    'batavia' => ['label' => 'Batavia sla', 'norm' => 8],
+                ]
             ],
-
-            // ===== IJS =====
+            'mcchicken' => [
+                'name' => 'McChicken',
+                'norms' => [
+                    'sla' => ['label' => 'IJsbergsla', 'norm' => 30],
+                ]
+            ],
+            'quarter_pounder' => [
+                'name' => 'Quarter Pounder',
+                'norms' => [
+                    'ui' => ['label' => 'Ui', 'norm' => 7],
+                ]
+            ],
+            'chili_chicken' => [
+                'name' => 'Chili Chicken',
+                'norms' => [
+                    'sla' => ['label' => 'IJsbergsla', 'norm' => 15],
+                ]
+            ],
+        ],
+        'ijs' => [
             'sundae' => [
-                'ijs' => ['label' => 'IJs', 'norm' => 120],
+                'name' => 'Sundae',
+                'norms' => [
+                    'ijs' => ['label' => 'IJs', 'norm' => 120],
+                ]
             ],
-
             'flurry' => [
-                'ijs' => ['label' => 'IJs', 'norm' => 170],
+                'name' => 'McFlurry',
+                'norms' => [
+                    'ijs' => ['label' => 'IJs', 'norm' => 170],
+                ]
             ],
-
             'ijshoorntje' => [
-                'ijs' => ['label' => 'IJs', 'norm' => 110],
+                'name' => 'IJshoorntje',
+                'norms' => [
+                    'ijs' => ['label' => 'IJs', 'norm' => 110],
+                ]
             ],
-
-            // ===== FRIET =====
+        ],
+        'friet' => [
             'small' => [
-                'friet' => ['label' => 'Friet', 'norm' => 80],
+                'name' => 'Klein',
+                'norms' => [
+                    'friet' => ['label' => 'Friet', 'norm' => 80],
+                ]
             ],
-
             'medium' => [
-                'friet' => ['label' => 'Friet', 'norm' => 114],
+                'name' => 'Medium',
+                'norms' => [
+                    'friet' => ['label' => 'Friet', 'norm' => 114],
+                ]
             ],
-
             'large' => [
-                'friet' => ['label' => 'Friet', 'norm' => 160],
+                'name' => 'Groot',
+                'norms' => [
+                    'friet' => ['label' => 'Friet', 'norm' => 160],
+                ]
             ],
-        ];
+        ],
+    ];
+
+    /**
+     * Returns products grouped by category for the selection view.
+     * 
+     * Output format:
+     * [
+     *    'burger' => [
+     *        'big_tasty' => 'Big Tasty',
+     *        ...
+     *    ],
+     *    ...
+     * ]
+     */
+    public function getProductsGroupedByCategory(): array
+    {
+        $grouped = [];
+        foreach (self::CATALOG as $catKey => $products) {
+            foreach ($products as $prodKey => $data) {
+                $grouped[$catKey][$prodKey] = $data['name'];
+            }
+        }
+        return $grouped;
+    }
+
+    /**
+     * Returns detailed norms for a list of product IDs.
+     */
+    public function getNormsForProducts(array $productIds): array
+    {
+        $result = [];
+
+        foreach (self::CATALOG as $products) {
+            foreach ($products as $key => $data) {
+                if (in_array($key, $productIds, true)) {
+                    $result[$key] = $data;
+                }
+            }
+        }
+
+        // Sort results to match input order if needed, or by category order implicitly
+        return $result;
+    }
+
+    /**
+     * Validates a list of product IDs.
+     * Returns only the IDs that actually exist in the catalog.
+     */
+    public function validateProductIds(array $ids): array
+    {
+        $validIds = [];
+        $allKeys = $this->getAllProductKeys();
+
+        foreach ($ids as $id) {
+            if (is_string($id) && in_array($id, $allKeys, true)) {
+                $validIds[] = $id;
+            }
+        }
+
+        return $validIds;
+    }
+
+    private function getAllProductKeys(): array
+    {
+        $keys = [];
+        foreach (self::CATALOG as $products) {
+            foreach (array_keys($products) as $key) {
+                $keys[] = $key;
+            }
+        }
+        return $keys;
     }
 }

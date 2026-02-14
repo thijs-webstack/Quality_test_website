@@ -1,96 +1,160 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Meten{% endblock %}
+{% block title %}Meting Uitvoeren{% endblock %}
 
 {% block body %}
-    <main class="flex justify-center px-4 py-10">
-        <div class="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-8 md:p-10">
+    <div class="flex flex-col pb-40 px-4 pt-8">
+        <div class="max-w-3xl w-full mx-auto">
+            
+            {# Progress #}
+            {% include 'quality_check/_progress.html.twig' with {step: 3} %}
+            
+            <header class="mb-10 text-center animate-fade-in-up">
+                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Meet de Producten</h1>
+                <p class="text-slate-500 font-medium mt-2">Vul de exacte gewichten in grammen in.</p>
+            </header>
 
-            <h1 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-10">
-                Metingen invoeren
-            </h1>
-
-            <form method="post" class="space-y-12">
-
-                {% for product, parts in structure %}
-                    <section>
-
-                        <!-- PRODUCT TITLE -->
-                        <h2 class="text-xl font-semibold text-gray-900 mb-6">
-                            {{ product|replace({'_':' '})|capitalize }}
-                        </h2>
-
-                        <!-- PARTS -->
-                        <div class="space-y-4">
-                            {% for key, part in parts %}
-                                <div
-                                    class="
-                                    flex items-center justify-between
-                                    rounded-xl border border-gray-200
-                                    px-4 py-4
-                                "
-                                >
-                                    <div>
-                                        <div class="text-sm font-medium text-gray-900">
-                                            {{ part.label }}
-                                        </div>
-                                        <div class="text-xs text-gray-500">
-                                            Procedure: {{ part.norm }} g
-                                        </div>
+            <form method="post" id="measure-form" class="space-y-8" onsubmit="this.querySelector('button[type=submit]').disabled = true; this.querySelector('button[type=submit]').classList.add('opacity-75', 'cursor-wait');">
+                <input type="hidden" name="_token" value="{{ csrf_token }}">
+                
+                {% for productKey, data in products %}
+                    <div class="product-block bg-white rounded-[2rem] shadow-lg shadow-slate-200/50 border border-slate-100 overflow-hidden animate-fade-in-up" 
+                         style="animation-delay: {{ loop.index0 * 50 }}ms">
+                        
+                        {# Header #}
+                        <div class="bg-slate-50/50 px-8 py-5 border-b border-slate-100 flex justify-between items-center backdrop-blur-sm">
+                            <h2 class="text-lg font-bold text-slate-800 tracking-wide">{{ data.name }}</h2>
+                            <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                        </div>
+                        
+                        {# Inputs #}
+                        <div class="p-8 space-y-8">
+                            {% for field, normDef in data.norms %}
+                                <div class="input-group group relative transition-transform duration-200 ease-out origin-center">
+                                    <div class="flex justify-between items-end mb-3">
+                                        <label for="m_{{ productKey }}_{{ field }}" class="block text-sm font-bold text-slate-600 uppercase tracking-wider">
+                                            {{ normDef.label }}
+                                        </label>
+                                        <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 group-focus-within:bg-yellow-50 group-focus-within:border-yellow-200 group-focus-within:text-yellow-700 transition-colors">
+                                            Doel: {{ normDef.norm }}g
+                                        </span>
                                     </div>
-
-                                    <div class="flex items-center gap-2">
-                                        <input
-                                            type="number"
-                                            step="0.1"
-                                            required
-                                            name="measurements[{{ product }}][{{ key }}]"
-                                            class="
-                                            w-28
-                                            rounded-lg
-                                            border border-gray-300
-                                            px-3 py-2
-                                            text-right
-                                            text-gray-900
-                                            focus:border-yellow-500
-                                            focus:ring-2
-                                            focus:ring-yellow-400
-                                        "
+                                    
+                                    <div class="relative">
+                                        <input type="number" 
+                                               step="0.1" 
+                                               inputmode="decimal"
+                                               name="measurements[{{ productKey }}][{{ field }}]" 
+                                               id="m_{{ productKey }}_{{ field }}"
+                                               required
+                                               class="measure-input block w-full rounded-2xl border-0 py-4 pl-5 pr-12 text-slate-900 text-xl font-bold tracking-widest bg-slate-50 shadow-inner ring-1 ring-inset ring-slate-200 focus:bg-white focus:ring-2 focus:ring-yellow-400 transition-all placeholder:text-slate-300 pattern-numeric"
+                                               placeholder="0"
                                         >
-                                        <span class="text-sm text-gray-500">
-                                        g
-                                    </span>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-5">
+                                            <span class="text-slate-400 font-bold sm:text-lg">gr</span>
+                                        </div>
                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
-
-                    </section>
+                    </div>
                 {% endfor %}
 
-                <!-- SUBMIT -->
-                <button
-                    type="submit"
-                    class="
-                    w-full rounded-xl
-                    bg-yellow-500
-                    px-6 py-4
-                    text-base font-semibold text-black
-                    shadow-md
-                    transition
-                    hover:bg-yellow-400
-                    hover:shadow-lg
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-yellow-400
-                    focus:ring-offset-2
-                    active:scale-[0.98]
-                "
-                >
-                    Afronden
-                </button>
+                {# Sticky Footer #}
+                <div class="fixed bottom-0 left-0 right-0 p-4 z-40 safe-area-bottom pointer-events-none">
+                    <div class="max-w-3xl mx-auto pointer-events-auto">
+                        <button
+                            type="submit"
+                            class="
+                            group w-full rounded-2xl
+                            bg-slate-900
+                            px-8 py-4
+                            text-lg font-bold text-white
+                            shadow-xl shadow-slate-900/10
+                            transition-all duration-300
+                            hover:bg-black hover:scale-[1.01] hover:shadow-slate-900/20
+                            active:scale-[0.98]
+                            flex items-center justify-center gap-3
+                            "
+                        >
+                            <span>Rapport Genereren</span>
+                            <div class="bg-white/10 p-1.5 rounded-full group-hover:bg-white/20 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </div>
+                        </button>
+                    </div>
+                </div>
 
-            </form>
+                <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('measure-form');
+            const inputs = Array.from(document.querySelectorAll('.measure-input'));
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault(); // Stop default form submit
+                        
+                        const nextInput = inputs[index + 1];
+                        
+                        if (nextInput) {
+                            // Move to next
+                            nextInput.focus();
+                            nextInput.select(); // Highlight content for easy overwrite
+                            
+                            // Scroll if needed (ensure visibility under sticky footer)
+                            nextInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        } else {
+                            // Last input -> Submit
+                            // Trigger visually button click to show animation/loading state
+                            submitBtn.click(); 
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</form>
         </div>
-    </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = Array.from(document.querySelectorAll('.measure-input'));
+            
+            // Auto focus
+            if (inputs.length > 0) {
+                setTimeout(() => inputs[0].focus(), 300);
+            }
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('focus', () => {
+                   // We trust the CSS focus-within now for cleaner logic
+                   input.closest('.input-group').classList.add('z-10');
+                   // Smooth scroll center
+                   input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+                
+                input.addEventListener('blur', () => {
+                    input.closest('.input-group').classList.remove('z-10');
+                });
+
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const nextIndex = index + 1;
+                        if (nextIndex < inputs.length) {
+                            inputs[nextIndex].focus();
+                        } else {
+                            // Focus the button instead of auto-submitting for safety
+                            document.querySelector('button[type="submit"]').focus();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

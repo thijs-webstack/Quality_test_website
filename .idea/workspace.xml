@@ -5,21 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c9cddb5-8926-4d58-af80-3b1b77091bd2" name="Changes" comment="commit to deploy">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Service/QualityCheckSession.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/quality_check/_progress.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/quality_check/selection.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/debug.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/reference.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/reference.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/QualityCheckController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/QualityCheckController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/QualityCheckStartType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QualityCheckStartType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Service/NormCatalog.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/NormCatalog.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/quality_check/measure.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/quality_check/measure.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/quality_check/product.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/quality_check/result.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/quality_check/result.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/quality_check/start.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/quality_check/start.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -274,7 +263,7 @@
       <workItem from="1770276651126" duration="6482000" />
       <workItem from="1770363964232" duration="184000" />
       <workItem from="1770890458893" duration="227000" />
-      <workItem from="1770996454395" duration="5976000" />
+      <workItem from="1770996454395" duration="7488000" />
     </task>
     <task id="LOCAL-00001" summary="commit to deploy">
       <option name="closed" value="true" />
@@ -292,7 +281,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770276721507</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="commit to deploy">
+      <option name="closed" value="true" />
+      <created>1771071602445</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1771071602445</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

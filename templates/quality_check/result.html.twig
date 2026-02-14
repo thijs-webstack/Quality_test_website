@@ -84,6 +84,7 @@
                     <form action="{{ path('quality_check_reset') }}" method="post"
                           onsubmit="return confirm('Weet je zeker dat je een nieuwe meting wilt starten?');"
                           class="sm:flex-none">
+                        <input type="hidden" name="_token" value="{{ csrf_token }}">
                         <button type="submit" class="w-full sm:w-auto bg-white text-slate-500 font-bold py-4 px-6 rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-100 hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-95 h-full">
                             Nieuw
                         </button>

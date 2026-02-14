@@ -126,20 +126,24 @@ final class QualityCheckController extends AbstractController
 
         $reportData = $this->qcSession->getReportData();
         $clipboardText = $this->qcSession->buildClipboardText();
+        $csrfToken = $this->csrfTokenManager->refreshToken('qc_reset');
 
         return $this->render('quality_check/result.html.twig', [
             'report' => $reportData,
             'clipboardText' => $clipboardText,
+            'csrf_token' => $csrfToken->getValue(),
         ]);
     }
 
     #[Route('/reset', name: '_reset', methods: ['POST'])]
-    public function reset(): Response
+    public function reset(Request $request): Response
     {
-        // Note: The reset form is usually a standard Symfony form or handled via a simple POST. 
-        // If it's a simple form in the result view, it should also have CSRF.
-        // For now, assuming the start form handles the main entry, 
-        // but if there's a specific reset button, we should check strictness later.
+        $token = new CsrfToken('qc_reset', $request->request->get('_token'));
+        if (!$this->csrfTokenManager->isTokenValid($token)) {
+            $this->addFlash('error', 'Ongeldige sessie status (CSRF). Probeer het opnieuw.');
+            return $this->redirectToRoute('quality_check_result');
+        }
+
         $this->qcSession->clear();
         return $this->redirectToRoute('quality_check_start');
     }

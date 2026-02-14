@@ -1,0 +1,12 @@
+{# templates/quality_check/_progress.html.twig #}
+{% set total = total|default(4) %}
+<div class="flex items-center justify-between mb-6 animate-fade-in-up">
+    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">
+        Stap {{ step }} van {{ total }}
+    </span>
+    <div class="flex gap-1.5">
+        {% for i in 1..total %}
+            <div class="h-1.5 rounded-full transition-all duration-300 {{ i <= step ? 'w-6 bg-yellow-400' : 'w-1.5 bg-slate-200' }}"></div>
+        {% endfor %}
+    </div>
+</div>

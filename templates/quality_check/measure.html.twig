@@ -87,57 +87,26 @@
                     </div>
                 </div>
 
-                <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('measure-form');
-            const inputs = Array.from(document.querySelectorAll('.measure-input'));
-            const submitBtn = form.querySelector('button[type="submit"]');
-
-            inputs.forEach((input, index) => {
-                input.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault(); // Stop default form submit
-                        
-                        const nextInput = inputs[index + 1];
-                        
-                        if (nextInput) {
-                            // Move to next
-                            nextInput.focus();
-                            nextInput.select(); // Highlight content for easy overwrite
-                            
-                            // Scroll if needed (ensure visibility under sticky footer)
-                            nextInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        } else {
-                            // Last input -> Submit
-                            // Trigger visually button click to show animation/loading state
-                            submitBtn.click(); 
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-</form>
+            </form>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const inputs = Array.from(document.querySelectorAll('.measure-input'));
-            
-            // Auto focus
+            const submitBtn = document.querySelector('#measure-form button[type="submit"]');
+
+            // Auto-focus first input after page transition
             if (inputs.length > 0) {
                 setTimeout(() => inputs[0].focus(), 300);
             }
 
             inputs.forEach((input, index) => {
                 input.addEventListener('focus', () => {
-                   // We trust the CSS focus-within now for cleaner logic
-                   input.closest('.input-group').classList.add('z-10');
-                   // Smooth scroll center
-                   input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    input.closest('.input-group').classList.add('z-10');
+                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 });
-                
+
                 input.addEventListener('blur', () => {
                     input.closest('.input-group').classList.remove('z-10');
                 });
@@ -145,12 +114,13 @@
                 input.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter') {
                         e.preventDefault();
-                        const nextIndex = index + 1;
-                        if (nextIndex < inputs.length) {
-                            inputs[nextIndex].focus();
+                        const nextInput = inputs[index + 1];
+                        if (nextInput) {
+                            nextInput.focus();
+                            nextInput.select();
                         } else {
-                            // Focus the button instead of auto-submitting for safety
-                            document.querySelector('button[type="submit"]').focus();
+                            // Last input: focus submit button for conscious confirmation
+                            submitBtn.focus();
                         }
                     }
                 });

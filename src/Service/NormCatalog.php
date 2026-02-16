@@ -6,7 +6,7 @@ namespace App\Service;
 
 final class NormCatalog
 {
-    /** 
+    /**
      * Central definition of the catalog.
      * Structure: Category -> ProductKey -> Details
      */
@@ -28,7 +28,7 @@ final class NormCatalog
             'crispy' => [
                 'name' => 'Crispy',
                 'norms' => [
-                    'batavia' => ['label' => 'Batavia sla', 'norm' => 8],
+                    'batavia' => ['label' => 'Batavia sla', 'norm' => 7],
                 ]
             ],
             'mcchicken' => [
@@ -54,19 +54,19 @@ final class NormCatalog
             'sundae' => [
                 'name' => 'Sundae',
                 'norms' => [
-                    'ijs' => ['label' => 'IJs', 'norm' => 120],
+                    'ijs' => ['label' => 'IJs', 'norm' => 85],
                 ]
             ],
             'flurry' => [
                 'name' => 'McFlurry',
                 'norms' => [
-                    'ijs' => ['label' => 'IJs', 'norm' => 170],
+                    'ijs' => ['label' => 'IJs', 'norm' => 155],
                 ]
             ],
             'ijshoorntje' => [
                 'name' => 'IJshoorntje',
                 'norms' => [
-                    'ijs' => ['label' => 'IJs', 'norm' => 110],
+                    'ijs' => ['label' => 'IJs', 'norm' => 85],
                 ]
             ],
         ],
@@ -94,7 +94,7 @@ final class NormCatalog
 
     /**
      * Returns products grouped by category for the selection view.
-     * 
+     *
      * Output format:
      * [
      *    'burger' => [

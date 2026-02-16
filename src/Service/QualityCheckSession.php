@@ -213,7 +213,7 @@ final class QualityCheckSession
                 $tooLow++;
             }
 
-            $lines[] = "- {$row['label']}: {$measured}g (norm {$norm}g) → {$diffFormatted}g {$status}";
+            $lines[] = "- {$row['label']}: {$measured}g (norm {$norm}g)";
         }
 
         $lines[] = "";
